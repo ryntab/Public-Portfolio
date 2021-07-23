@@ -7,9 +7,11 @@
 - Easily embed and automatically reference stocks using simple notation. 
 - Supports Acato's WP REST Caching.
 
-# Shortcodes
+## Shortcodes
 
-## User Portfolio Watchlist
+
+
+### User Portfolio Watchlist
 
 Display your watchlist stocks.
 
@@ -28,13 +30,16 @@ Show only specific stocks from your watchlist.
 ```
 [public_portfolio_watchlist ticker="CLNE,SOFI,AMD,AMC,BHAT"]
 ```
+
 #### **Note:** Special Cases
 > If you exclude and include a watchlist stock, it will always default to being hidden. Hiding a stock is the override property. In the shortcode below $HUYA will not be shown.
 ```
 [public_portfolio_watchlist hideticker="HUYA" ticker="HUYA"]
 ```
 
-## Basic User Portfolio
+
+
+### Basic User Portfolio
 
 Display the basic information from your Public.com portfolio.
 ```
