@@ -11,19 +11,19 @@
 
 Every 60 seconds, this plugin curls the Public.com API and saves your watchlist data to your sites WP options table. The fetch interval can be changed, but 60 seconds is the advised period of time to prevent abuse.
 
-Display your watchlist stocks.
+**Display your watchlist stocks**
 
 ```
 [public_portfolio_watchlist]
 ```
 
-Exclude specific stocks from your watchlist.
+**Exclude specific stocks from your watchlist**
 
 ```
 [public_portfolio_watchlist hideticker="AMD,GME,LZB"]
 ```
 
-Show only specific stocks from your watchlist.
+**Show only specific stocks from your watchlist**
 
 ```
 [public_portfolio_watchlist ticker="CLNE,SOFI,AMD,AMC,BHAT"]
