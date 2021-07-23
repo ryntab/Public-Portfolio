@@ -72,7 +72,7 @@ class Public_Portfolio {
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'plugin-name';
+		$this->plugin_name = 'public-portfolio';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -156,6 +156,8 @@ class Public_Portfolio {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action( 'init', $plugin_admin, 'cron_Save_User_Data' );
+		$this->loader->add_action ('rest_api_init', $plugin_admin, 'individual_stock_endpoint');
 
 	}
 
@@ -173,7 +175,7 @@ class Public_Portfolio {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-		// $this->loader->add_shortcode( 'public_portfolio', $plugin_public, 'register_public_portfolio_shortcode' );
+		$this->loader->add_filter( 'the_content', $plugin_public, 'filter_stock_mentions');
 	}
 
 	/**

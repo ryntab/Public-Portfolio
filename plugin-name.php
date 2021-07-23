@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       Public.com Portfolio
  * Plugin URI:        http://example.com/plugin-name-uri/
- * Description:       Display your Public.com portfolio and watchlists with shortcodes and widgets! 
+ * Description:       Display your Public.com portfolio and watchlists with shortcodes and widgets! Embed stock charts with simple shortcodes or add tooltip stock displays to your links. This plugin not supported or maintained by Public.com 🎉
  * Version:           1.0.0
  * Author:            Ryan Taber
  * Author URI:        https://www.ryntab.com/
