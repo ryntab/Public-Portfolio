@@ -107,22 +107,31 @@ class Public_Portfolio_Admin
 	 *
 	 * @since    1.0.0
 	 */
+
+	public static function curl_this($url)
+	{
+		$curl = curl_init($url);
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+		$headers = Public_Portfolio_Admin::curl_headers();
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+		$returnedData = json_decode(curl_exec($curl));
+		curl_close($curl);
+		return $returnedData;
+	}
+
+	public static function curl_headers()
+	{
+		return array(
+			"Accept: application/json",
+			"Authorization: Bearer " . Public_Portfolio_Admin::JWT_Credentials(),
+		);
+	}
+
 	public static function JWT_Credentials()
 	{
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Public_Portfolio_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Public_Portfolio_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
-
 		// Generated @ codebeautify.org
 		$ch = curl_init();
 
@@ -140,90 +149,97 @@ class Public_Portfolio_Admin
 		return $auth->jwt;
 	}
 
-	public static function curl_headers(){
-		return array(
-			"Accept: application/json",
-			"Authorization: Bearer " . Public_Portfolio_Admin::JWT_Credentials(),
-		);
-	}
-
 	public static function user_Credentials()
 	{
-
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Public_Portfolio_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Public_Portfolio_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
 		$username = 'ryntab';
 
 		$url = "https://prod-api.154310543964.hellopublic.com/communityservice/users?username=" . $username;
 
-		$curl = curl_init($url);
-		curl_setopt($curl, CURLOPT_URL, $url);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-		$headers = Public_Portfolio_Admin::curl_headers();
-
-		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-
-		$ID = curl_exec($curl);
-		curl_close($curl);
-
-		return json_decode($ID);
+		return Public_Portfolio_Admin::curl_this($url);
 	}
 
 	public static function get_User_Data()
 	{
 		$ID = Public_Portfolio_Admin::user_Credentials()->publicId;
 
-		$url = "https://prod-api.154310543964.hellopublic.com/communityservice/users/".$ID;
+		$url = "https://prod-api.154310543964.hellopublic.com/communityservice/users/" . $ID;
 
-		$curl = curl_init($url);
-		curl_setopt($curl, CURLOPT_URL, $url);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-		$headers = Public_Portfolio_Admin::curl_headers();
-		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-
-		$userData = curl_exec($curl);
-		curl_close($curl);
-		return json_decode($userData);
+		return Public_Portfolio_Admin::curl_this($url);
 	}
 
-	public static function cron_Get_User_Data()
+	public static function save_Watched_Entities_Data()
+	{
+
+		$watchlistEntities = implode(",", get_option('public_user_watchlist'));
+
+		$url = "https://prod-api.154310543964.hellopublic.com/graphservice/quotes?symbols=" . $watchlistEntities;
+
+		update_option('public_user_watchlist_data', Public_Portfolio_Admin::curl_this($url), false);
+	}
+
+	public static function save_Opened_Positions_Data()
+	{
+		$watchlistEntities = implode(",", get_option('public_user_positions'));
+
+		$url = "https://prod-api.154310543964.hellopublic.com/graphservice/quotes?symbols=" . $watchlistEntities;
+
+		update_option('public_user_positions_data', Public_Portfolio_Admin::curl_this($url), false);
+	}
+
+	public static function cron_Save_User_Data()
 	{
 		$userData = Public_Portfolio_Admin::get_User_Data();
-		update_option( 'public_user_data', $userData, false);
+
+		$watchlist = array();
+		$postions = array();
+
+		foreach ($userData->positions->positionEntries as $ticker) {
+			array_push($postions, $ticker->symbol);
+		}
+
+		foreach ($userData->watchlist->watchedEntities as $ticker) {
+			array_push($watchlist, $ticker->symbol);
+		}
+
+		Public_Portfolio_Admin::save_Watched_Entities_Data();
+		Public_Portfolio_Admin::save_Opened_Positions_Data();
+
+		update_option('public_user_positions', $postions, false);
+		update_option('public_user_watchlist', $watchlist, false);
+		update_option('public_user_data', $userData, false);
+	}
+
+	public function get_Individual_Stock($data)
+	{
+
+		$url = "https://prod-api.154310543964.hellopublic.com/graphservice/graphs/stock/" . $data['symbol'] . "/" . $data['interval'];
+
+		$data = Public_Portfolio_Admin::curl_this($url);
+
+		wp_send_json($data);
+	}
+
+	public static function individual_stock_endpoint()
+	{
+		register_rest_route('public', '/stock/(?P<symbol>[a-zA-Z0-9-]+)/(?P<interval>[a-zA-Z0-9-]+)', array(
+			'methods' => 'GET',
+			'callback' => [$this, 'get_Individual_Stock'],
+		));
 	}
 }
 
 add_filter('cron_schedules', 'public_Data_Fetcher');
 function public_Data_Fetcher($schedules)
 {
-    $schedules['every_three_minutes'] = array(
-        'interval' => 60,
-        'display' => __('Every 60 Seconds', 'textdomain')
-    );
-    return $schedules;
+	$schedules['every_three_minutes'] = array(
+		'interval' => 60,
+		'display' => __('Every 60 Seconds', 'textdomain')
+	);
+	return $schedules;
 }
 
-add_action('public_Data_Fetcher', [ __NAMESPACE__ . '\Public_Portfolio_Admin','cron_Get_User_Data' ]);
+add_action('public_Data_Fetcher', [__NAMESPACE__ . '\Public_Portfolio_Admin', 'cron_Save_User_Data']);
 
 if (!wp_next_scheduled('public_Data_Fetcher')) {
-    wp_schedule_event(time(), 'every_three_minutes', 'public_Data_Fetcher');
+	wp_schedule_event(time(), 'every_three_minutes', 'public_Data_Fetcher');
 }
-
-// if( wp_next_scheduled( 'public_Data_Fetcher' ) ){
-// wp_clear_scheduled_hook( 'public_Data_Fetcher' );
-// }
-
-add_action('my_unique_plugin_event_hook', array($this,'hook'));
