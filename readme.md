@@ -44,7 +44,7 @@ Display the basic information from your Public.com portfolio.
 [public_portfolio_bio]
 ```
 
-<img src="https://github.com/ryntab/Public-Portfolio/blob/main/Profile.png">
+<img src="https://github.com/ryntab/Public-Portfolio/blob/main/Profile.jpg">
 
 <p align="center">
     <br/><br/>
