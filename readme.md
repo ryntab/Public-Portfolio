@@ -9,7 +9,7 @@
 
 ## Shortcodes
 
-### User Porfolio Watchlist
+### User Portfolio Watchlist
 
 Display your watchlist stocks.
 
@@ -34,6 +34,12 @@ Show only specific stocks from your watchlist.
 [public_portfolio_watchlist hideticker="HUYA" ticker="HUYA"]
 ```
 
+### Basic User Portfolio
+
+Display the basic information from your Public.com portfolio.
+```
+[public_portfolio_bio]
+```
 
 <p align="center">
     <br/><br/>
