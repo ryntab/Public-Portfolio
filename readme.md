@@ -46,6 +46,13 @@ Display the basic information from your Public.com portfolio.
 
 <img src="https://github.com/ryntab/Public-Portfolio/blob/main/Profile.jpg">
 
+## Automatic stock referencing
+
+Embed stock references with super simple notation and automatically display self fetching stock tool tips with time chart graphs and other display options. In order to reference a stock in a post or page, just add a '$' before the stock symbol. The stock will be detected automatically.
+```
+While the bull case is pretty clear for why $AMD will reach $100, the stock has not had the same type of success that Nvidia has had lately.
+```
+
 <p align="center">
     <br/><br/>
     Made with ❤ by <a href="ryntab.com">Ryan Taber</a>.<br/>
