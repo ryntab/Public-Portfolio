@@ -13,3 +13,27 @@
     <a href="#">For Wordpress</a>
     This plugin is not maintained or affiliated with Public.com
 </p>
+
+## Shortcodes
+
+### User Porfolio Watchlist
+
+Display your watchlist stocks.
+
+```
+[public_portfolio_watchlist]
+```
+
+Exclude specific stocks from your watchlist.
+
+```
+[public_portfolio_watchlist 
+hideticker="AMD,GME,LZB"]
+```
+
+Show only specific stocks from your watchlist.
+
+```
+[public_portfolio_watchlist 
+ticker="CLNE,SOFI,AMD,AMC,BHAT"]
+```
