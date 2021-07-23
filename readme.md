@@ -7,13 +7,6 @@
 - Easily embed and automatically reference stocks using simple notation. 
 - Supports Acato's WP REST Caching.
 
-<p align="center">
-    <br/><br/>
-    Made with ❤ by <a href="ryntab.com">Ryan Taber</a>.<br/>
-    <a href="#">For Wordpress</a>
-    This plugin is not maintained or affiliated with Public.com
-</p>
-
 ## Shortcodes
 
 ### User Porfolio Watchlist
@@ -27,13 +20,17 @@ Display your watchlist stocks.
 Exclude specific stocks from your watchlist.
 
 ```
-[public_portfolio_watchlist 
-hideticker="AMD,GME,LZB"]
+[public_portfolio_watchlist hideticker="AMD,GME,LZB"]
 ```
 
 Show only specific stocks from your watchlist.
 
 ```
-[public_portfolio_watchlist 
-ticker="CLNE,SOFI,AMD,AMC,BHAT"]
+[public_portfolio_watchlist ticker="CLNE,SOFI,AMD,AMC,BHAT"]
 ```
+<p align="center">
+    <br/><br/>
+    Made with ❤ by <a href="ryntab.com">Ryan Taber</a>.<br/>
+    <a href="#">For Wordpress</a>
+    This plugin is not maintained or affiliated with Public.com
+</p>
