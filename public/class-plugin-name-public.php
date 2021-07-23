@@ -20,7 +20,8 @@
  * @subpackage Public_Portfolio/public
  * @author     Your Name <email@example.com>
  */
-class Public_Portfolio_Public {
+class Public_Portfolio_Public
+{
 
 	/**
 	 * The ID of this plugin.
@@ -47,14 +48,15 @@ class Public_Portfolio_Public {
 	 * @param      string    $plugin_name       The name of the plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct($plugin_name, $version)
+	{
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
-		add_shortcode( 'public_portfolio', array($this, 'register_public_portfolio_shortcode') );
-		add_shortcode( 'public_portfolio_bio', array($this, 'register_public_portfolio_bio') );
-
+		add_shortcode('public_portfolio_watchlist', array($this, 'register_public_portfolio_watchlist'));
+		add_shortcode('public_portfolio_bio', array($this, 'register_public_portfolio_bio'));
+		add_shortcode('public_stock_embed', array($this, 'register_public_stock_embed'));
 	}
 
 	/**
@@ -62,7 +64,8 @@ class Public_Portfolio_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function enqueue_styles()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -76,8 +79,7 @@ class Public_Portfolio_Public {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/plugin-name-public.css', array(), $this->version, 'all' );
-
+		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/plugin-name-public.css', array(), $this->version, 'all');
 	}
 
 	/**
@@ -85,7 +87,8 @@ class Public_Portfolio_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function enqueue_scripts()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -98,37 +101,89 @@ class Public_Portfolio_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/plugin-name-public.js', array( 'jquery' ), $this->version, false );
-	}
-
-	public function register_public_portfolio_shortcode(){
-		$userData = get_option('public_user_data');
-		//echo '<div class="css-firzh2"><div role="radiogroup" class="css-14vo4ai"><label aria-checked="true" class="css-q5qaxf"><input type="radio" checked="" name="filter" value="portfolio"><span>Portfolio</span></label><label aria-checked="false" class="css-q5qaxf"><input type="radio" name="filter" value="longterm"><span>Long-term</span></label><label aria-checked="false" class="css-q5qaxf"><input type="radio" name="filter" value="watchlist"><span>Watchlist</span></label></div><section role="list" class="css-1dx5e52">';
 		
-		//print_r($userData->positions->positionEntries);
-		foreach($userData->positions->positionEntries as $key){
-			//echo '<div role="listitem" tabindex="0" class="css-mub7"><div><article class="css-x8v0h7"><a aria-label="'.$key->name.'" href="/stocks/ACB"><div data-logo="true" class="css-o6on0v"><img alt="ACB logo" loading="lazy" src="https://universal.hellopublic.com/companyLogos/ACB@2x.png?v=fa60680a-a44c-4a20-9f07-1aa83dc487d6" class="css-3j1uxc"></div></a><div class="css-jifwjk"><a href="/stocks/ACB"><span class="css-uahqw4">'.$key->symbol.'</span></a></div><button class="css-gpmf5p"><span>+3.15%</span></button></article></div></div>';
-		}
-		//echo '</section><button class="css-1aqck32"><span>Show all</span></button></div>';
-
-
+		wp_enqueue_script('popper', plugin_dir_url(__FILE__) . 'js/popper.min.js', array('jquery'), $this->version, false);
+		wp_enqueue_script('tippy', plugin_dir_url(__FILE__) . 'js/tippy.min.js', array('popper'), $this->version, false);
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/public.js', array('jquery', 'popper'), $this->version, false);
+		wp_add_inline_script($this->plugin_name, 'const auth = "'.Public_Portfolio_Admin::JWT_Credentials().'";');
 	}
 
-	public function register_public_portfolio_bio(){
+	public function register_public_portfolio_watchlist($atts)
+	{
+		$watchedStocksData = get_option('public_user_watchlist_data');
+
+		$onlyTickers = explode(',', $atts['ticker']);
+
+		$cleanTickers = array_map(function ($piece) {
+			return (string) str_replace(' ', '', $piece);
+		}, $onlyTickers);
+
+		echo '<div class="css-firzh2">';
+		foreach ($watchedStocksData->quotes as $ticker) {
+
+			if (!$cleanTickers[0] == '') {
+				if (!in_array($ticker->symbol, $onlyTickers)) {
+					continue;
+				};
+			}
+
+			$percentage = number_format((float)$ticker->gainPercentage, 2, '.', '');
+			$color = ($percentage < 0) ? $color = 'red' : $color = 'green';
+			echo '<div role="listitem" tabindex="0" class="css-mub7"><div><article class="css-x8v0h7"><a aria-label="$' . $ticker->symbol . '"><div data-logo="true" class="css-o6on0v"><img alt="' . $ticker->symbol . ' logo" loading="lazy" src="https://universal.hellopublic.com/companyLogos/' . $ticker->symbol . '@2x.png?v=fa60680a-a44c-4a20-9f07-1aa83dc487d6" class="css-3j1uxc"></div></a><div class="css-jifwjk"><a href="/stocks/' . $ticker->symbol . '"><span class="css-uahqw4"> $' . $ticker->symbol . '</span></a></div><button class="css-gpmf5p" style="color: var(--color-' . $color . '); background-color: var(--color-light-' . $color . ');"><span>' . $percentage . '%</span></button></article></div></div>';
+		}
+		echo '</section></div>';
+	}
+
+	public function register_public_portfolio_bio()
+	{
 		$userData = get_option('public_user_data');
 		$html = '<div class="public-card">';
 		$html .= '<div class="public-identity-top">';
 		$html .= '<div class="public-identity">';
 		$html .= '<a href="#" class="public-following">';
-		$html .= $userData->followersCount.' Followers • '.$userData->followingCount.' Following</a>';
-		$html .= '<div class="public-name">'.$userData->displayName.'</div>';
-		$html .= '<div class="public-username"><span class="public-userName">@'.$userData->username.'</span></div></div>';
+		$html .= $userData->followersCount . ' Followers • ' . $userData->followingCount . ' Following</a>';
+		$html .= '<div class="public-name">' . $userData->displayName . '</div>';
+		$html .= '<div class="public-username"><span class="public-userName">@' . $userData->username . '</span></div></div>';
 		$html .= '<div class="public-profile-image-container"><a aria-label="ryntab" href="/ryntab">';
-		$html .= '<img loading="lazy" alt="Ryan Taber avatar" src="'.$userData->profilePictureURL.'"></a></div></div>';
-		$html .= '<div class="public-bio"><span>'.$userData->bio.'</span></div>';
-		$html .= '<div class="public-link"><span class="css-1b27v1c">'.$userData->websiteLink.'</a></div></div>';
+		$html .= '<img loading="lazy" alt="Ryan Taber avatar" src="' . $userData->profilePictureURL . '"></a></div></div>';
+		$html .= '<div class="public-bio"><span>' . $userData->bio . '</span></div>';
+		$html .= '<div class="public-link"><span class="css-1b27v1c">' . $userData->websiteLink . '</a></div></div>';
 		echo $html;
 	}
 
+
+	public function register_public_stock_embed($atts)
+	{
+		$ticker = $atts['ticker'];
+		if (!$ticker) return;
+		return '<iframe width="100%" height="312" src="https://public.com/stocks/' . $ticker . '/embed" frameborder="0" allow="encrypted-media" allowfullscreen allowtransparency></iframe>';
+	}
+
+	public function filter_stock_mentions($content)
+	{
+		if ((is_single() || is_page())) {
+			preg_replace('/([\$])\w+/m', 'wdawdwd', $content);
+
+
+			return preg_replace_callback_array([
+				// 1. Removes WordPress injected <p> tags surrounding images in post content.
+				'/([\$])\w+/m' => function (&$matches) {
+						return '<span class="public-ticker" data-symbol="'.str_replace('$', '', $matches[0]).'"><span class="ticker"><strong>' . $matches[0] . '</strong></span></span>';
+				},
+				// 2. Adds custom data-attribute to <p> tags providing a paragraph id number.
+				// '|<p>|' => function (&$matches) {
+				// 	static $i = 1;
+				// 	return sprintf('<p data-p-id="%d">', $i++);
+				// },
+			], $content);
+
+
+			// preg_match_all('/([\$])\w+/m', $content, $matches);
+			// foreach($matches[0] as $ticker){
+
+			// }
+			return $content;
+		}
+		return $content;
+	}
 }
