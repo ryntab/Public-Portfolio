@@ -7,6 +7,43 @@
 - Easily embed and automatically reference stocks using simple notation. 
 - Supports Acato's WP REST Caching.
 
+## User Portfolio Watchlist
+
+Every 60 seconds, this plugin curls the Public.com API and saves your watchlist data to your sites WP options table. The fetch interval can be changed, but 60 seconds is the advised period of time to prevent abuse.
+
+**Display your watchlist stocks**
+
+```
+[public_portfolio_watchlist]
+```
+
+**Exclude specific stocks from your watchlist**
+
+```
+[public_portfolio_watchlist hideticker="AMD,GME,LZB"]
+```
+
+**Show only specific stocks from your watchlist**
+
+```
+[public_portfolio_watchlist ticker="CLNE,SOFI,AMD,AMC,BHAT"]
+```
+
+#### **Note:** Special Cases
+> If you exclude and include a watchlist stock, it will always default to being hidden. Hiding a stock is the override property. In the shortcode below $HUYA will not be shown.
+```
+[public_portfolio_watchlist hideticker="HUYA" ticker="HUYA"]
+```
+
+
+
+## Basic User Portfolio
+
+Display the basic information from your Public.com portfolio.
+```
+[public_portfolio_bio]
+```
+
 <p align="center">
     <br/><br/>
     Made with ❤ by <a href="ryntab.com">Ryan Taber</a>.<br/>
