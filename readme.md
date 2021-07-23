@@ -2,7 +2,7 @@
 
 `~Current Version:1.0.0~`
 
-# Public.com Stock Display and Portfolio Shortcodes 😴
+# Public.com Stock Display and Portfolio Shortcodes 🤑
 - Display your Public.com portfolio, watchlists, and posts in your Wordpress blog.
 - Easily embed and automatically reference stocks using simple notation. 
 - Supports Acato's WP REST Caching.
