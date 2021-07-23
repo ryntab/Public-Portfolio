@@ -28,6 +28,13 @@ Show only specific stocks from your watchlist.
 ```
 [public_portfolio_watchlist ticker="CLNE,SOFI,AMD,AMC,BHAT"]
 ```
+
+> If you exclude and include a watchlist stock, it will always default to being hidden. Hiding a stock is the override property. In the shortcode below $HUYA will not be shown.
+```
+[public_portfolio_watchlist hideticker="HUYA" ticker="HUYA"]
+```
+
+
 <p align="center">
     <br/><br/>
     Made with ❤ by <a href="ryntab.com">Ryan Taber</a>.<br/>
