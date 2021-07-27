@@ -44,7 +44,14 @@ Display the basic information from your Public.com portfolio.
 [public_portfolio_bio]
 ```
 
-<img src="https://github.com/ryntab/Public-Portfolio/blob/main/Profile.png">
+<img src="https://github.com/ryntab/Public-Portfolio/blob/main/Profile.jpg">
+
+## Automatic stock referencing
+
+Embed stock references with super simple notation and automatically display self fetching stock tool tips with time chart graphs and other display options. In order to reference a stock in a post or page, just add a '$' before the stock symbol. The stock will be detected automatically.
+```
+The bull case is pretty clear for why $AMD will reach $100.
+```
 
 <p align="center">
     <br/><br/>
