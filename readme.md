@@ -54,6 +54,7 @@ All referenced stocks will have their data stored automatically in a database ta
 ```
 The bull case is pretty clear for why $AMD will reach $100.
 ```
+<img src="https://github.com/ryntab/Public-Portfolio/blob/main/Tooltip.jpg">
 
 <p align="center">
     <br/><br/>
