@@ -37,7 +37,7 @@ Every 60 seconds, this plugin curls the Public.com API and saves your watchlist 
 [public_portfolio_watchlist hideticker="HUYA" ticker="HUYA"]
 ```
 
-
+<br>
 
 ## - Basic User Portfolio 👤
 
@@ -48,6 +48,8 @@ Display the basic information from your Public.com portfolio.
 
 <img src="https://github.com/ryntab/Public-Portfolio/blob/main/Profile.jpg">
 
+<br>
+
 ## - Automatic stock referencing
 
 Embed stock references with super simple notation and automatically display self fetching stock tool tips with time chart graphs and other display options. In order to reference a stock in a post or page, just add a '$' before the stock symbol. The stock will be detected automatically.
@@ -57,6 +59,8 @@ All referenced stocks will have their data stored automatically in a database ta
 The bull case is pretty clear for why $AMD will reach $100.
 ```
 <img src="https://github.com/ryntab/Public-Portfolio/blob/main/Tooltip.jpg">
+
+<br>
 
 ## - Single Stock Iframes
 
