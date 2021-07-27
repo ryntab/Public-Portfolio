@@ -7,7 +7,7 @@
 - Easily embed and automatically reference stocks using simple notation. 
 - Supports Acato's WP REST Caching.
 
-## User Portfolio Watchlist
+## - User Portfolio Watchlist
 
 Every 60 seconds, this plugin curls the Public.com API and saves your watchlist data to your sites WP options table. The fetch interval can be changed, but 60 seconds is the advised period of time to prevent abuse.
 
@@ -37,7 +37,7 @@ Every 60 seconds, this plugin curls the Public.com API and saves your watchlist 
 
 
 
-## Basic User Portfolio
+## - Basic User Portfolio 👤
 
 Display the basic information from your Public.com portfolio.
 ```
@@ -46,7 +46,7 @@ Display the basic information from your Public.com portfolio.
 
 <img src="https://github.com/ryntab/Public-Portfolio/blob/main/Profile.jpg">
 
-## Automatic stock referencing
+## - Automatic stock referencing
 
 Embed stock references with super simple notation and automatically display self fetching stock tool tips with time chart graphs and other display options. In order to reference a stock in a post or page, just add a '$' before the stock symbol. The stock will be detected automatically.
 
@@ -56,7 +56,7 @@ The bull case is pretty clear for why $AMD will reach $100.
 ```
 <img src="https://github.com/ryntab/Public-Portfolio/blob/main/Tooltip.jpg">
 
-## Single Stock Iframes
+## - Single Stock Iframes
 
 Embed a single stock chart directly from the Public.com website using a simple shortcode. It's not recomended that this shortcode is used, it seems Public.com has some formatting issues in their embedded iframes. You can alternativley use our custom single stock displays.
 ```
