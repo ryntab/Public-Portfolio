@@ -112,20 +112,28 @@ class Public_Portfolio_Public
 	{
 		$watchedStocksData = get_option('public_user_watchlist_data');
 
-		$onlyTickers = explode(',', $atts['ticker']);
-
-		$cleanTickers = array_map(function ($piece) {
-			return (string) str_replace(' ', '', $piece);
-		}, $onlyTickers);
+		if (isset($atts['ticker'])) $onlyTickers = explode(',', str_replace(' ', '', $atts['ticker']));
+		
+		if (isset($atts['hideticker'])) $hideTickers = explode(',', str_replace(' ', '', $atts['hideticker']));
 
 		echo '<div class="css-firzh2">';
 		foreach ($watchedStocksData->quotes as $ticker) {
 
-			if (!$cleanTickers[0] == '') {
+			if (isset($onlyTickers)) {
 				if (!in_array($ticker->symbol, $onlyTickers)) {
 					continue;
-				};
+				}
 			}
+
+			if (isset($hideTickers)) {
+				if (in_array($ticker->symbol, $hideTickers)){
+					continue;
+				}
+			}
+
+			
+
+			
 
 			$percentage = number_format((float)$ticker->gainPercentage, 2, '.', '');
 			$color = ($percentage < 0) ? $color = 'red' : $color = 'green';

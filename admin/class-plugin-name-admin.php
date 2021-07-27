@@ -135,7 +135,7 @@ class Public_Portfolio_Admin
 		// Generated @ codebeautify.org
 		$ch = curl_init();
 
-		curl_setopt($ch, CURLOPT_URL, 'https://prod-api.154310543964.hellopublic.com/static/anonymoususer/credentials.json');
+		curl_setopt($ch, CURLOPT_URL, PUBLIC_GRAPH_USERS . 'static/anonymoususer/credentials.json');
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 		$result = curl_exec($ch);
@@ -153,7 +153,7 @@ class Public_Portfolio_Admin
 	{
 		$username = 'ryntab';
 
-		$url = "https://prod-api.154310543964.hellopublic.com/communityservice/users?username=" . $username;
+		$url = PUBLIC_GRAPH_USERS . "communityservice/users?username=" . $username;
 
 		return Public_Portfolio_Admin::curl_this($url);
 	}
@@ -162,7 +162,7 @@ class Public_Portfolio_Admin
 	{
 		$ID = Public_Portfolio_Admin::user_Credentials()->publicId;
 
-		$url = "https://prod-api.154310543964.hellopublic.com/communityservice/users/" . $ID;
+		$url = PUBLIC_GRAPH_USERS . "communityservice/users/" . $ID;
 
 		return Public_Portfolio_Admin::curl_this($url);
 	}
@@ -172,7 +172,7 @@ class Public_Portfolio_Admin
 
 		$watchlistEntities = implode(",", get_option('public_user_watchlist'));
 
-		$url = "https://prod-api.154310543964.hellopublic.com/graphservice/quotes?symbols=" . $watchlistEntities;
+		$url = PUBLIC_GRAPH_API . "quotes?symbols=" . $watchlistEntities;
 
 		update_option('public_user_watchlist_data', Public_Portfolio_Admin::curl_this($url), false);
 	}
@@ -181,7 +181,7 @@ class Public_Portfolio_Admin
 	{
 		$watchlistEntities = implode(",", get_option('public_user_positions'));
 
-		$url = "https://prod-api.154310543964.hellopublic.com/graphservice/quotes?symbols=" . $watchlistEntities;
+		$url = PUBLIC_GRAPH_API . "quotes?symbols=" . $watchlistEntities;
 
 		update_option('public_user_positions_data', Public_Portfolio_Admin::curl_this($url), false);
 	}
@@ -209,15 +209,62 @@ class Public_Portfolio_Admin
 		update_option('public_user_data', $userData, false);
 	}
 
+	public static function set_Individual_Stock($symbol, $exists){
+		global $wpdb;
+
+		$interval = 'DAY';
+		$table = 'public_stored_tickers';
+		$column = 'ticker_symbol';
+
+		$url = PUBLIC_GRAPH_API . "graphs/stock/" . $symbol . "/" . $interval;
+
+		$response = Public_Portfolio_Admin::curl_this($url);
+
+		$new = array(
+			'ticker_symbol' => $symbol,
+			'ticker_data' => json_encode($response), 
+			'updated_at' => date('Y-m-d H:i:s')
+		);
+
+		if ($exists){
+			$wpdb->replace( 'public_stored_tickers', $new);
+		} else if (!$exists) {
+			$wpdb->insert( 'public_stored_tickers', $new);
+		}
+
+		$data = $wpdb->get_results( "SELECT * FROM $table WHERE $column = '$symbol'");
+
+		return $data;
+	}
+
 	public function get_Individual_Stock($data)
 	{
+		global $wpdb;
 
-		$url = "https://prod-api.154310543964.hellopublic.com/graphservice/graphs/stock/" . $data['symbol'] . "/" . $data['interval'];
+		$symbol = $data['symbol'];
 
-		$data = Public_Portfolio_Admin::curl_this($url);
+		$table = 'public_stored_tickers';
+		$column = 'ticker_symbol';
 
-		wp_send_json($data);
+		$readTicker = $wpdb->get_results( "SELECT * FROM $table WHERE $column = '$symbol'");
+
+		//If record does not exist, lets create it!
+		if (empty($readTicker)){
+			$response = Public_Portfolio_Admin::set_Individual_Stock($data['symbol'], $exists = false);
+		};
+
+		//If record is stale, lets update it! Or if its not lets just fetch from the database.
+		if (!empty($readTicker)){
+			if (strtotime(date('Y-m-d H:i:s')) - strtotime($readTicker[0]->updated_at) > 60){ 
+				$response = Public_Portfolio_Admin::set_Individual_Stock($data['symbol'], $exists = true);
+			} else {
+				$response = $readTicker;
+			}
+		}
+	
+		wp_send_json($response);
 	}
+
 
 	public static function individual_stock_endpoint()
 	{

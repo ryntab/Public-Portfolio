@@ -37,6 +37,10 @@ if ( ! defined( 'WPINC' ) ) {
  */
 define( 'PUBLIC_PORTFOLIO_VERSION', '1.0.0' );
 
+define( 'PUBLIC_GRAPH_API', 'https://prod-api.154310543964.hellopublic.com/graphservice/');
+
+define( 'PUBLIC_GRAPH_USERS', 'https://prod-api.154310543964.hellopublic.com/');
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-plugin-name-activator.php

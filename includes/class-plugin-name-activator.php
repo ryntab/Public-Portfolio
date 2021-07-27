@@ -30,7 +30,17 @@ class Public_Portfolio_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-
+		global $wpdb;
+		$charset_collate = $wpdb->get_charset_collate();
+		$tableName = 'public_stored_tickers';
+		$sql = "CREATE TABLE `{$tableName}` (
+			ticker_symbol varchar(5) NOT NULL,
+			ticker_data LONGTEXT NOT NULL,
+			updated_at datetime NOT NULL,
+			PRIMARY KEY  (ticker_symbol)
+			) $charset_collate;";
+			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+			dbDelta($sql);
 	}
 
 }
