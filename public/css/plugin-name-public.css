@@ -61,6 +61,12 @@
     width: 64px;
   }
 }
+.tippy-arrow {
+  color: white !important;
+}
+.tippy-box {
+  background-color: white !important;
+}
 .public-bio {
   font-family: Graphik;
   font-size: 16px;
@@ -70,6 +76,22 @@
   margin-top: 12px;
   overflow: hidden;
   white-space: pre-line;
+}
+.public-popup-image {
+  -webkit-box-align: center;
+  align-items: center;
+  background: rgb(243 243 243) !important;
+  border-radius: 100%;
+  box-shadow: none;
+  box-sizing: border-box;
+  display: flex;
+  flex-shrink: 0;
+  height: 40px;
+  -webkit-box-pack: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 2px !important;
+  width: 40px;
 }
 .public-link > a > svg,
 .public-link > span > svg {
@@ -262,6 +284,17 @@
   outline: none;
 }
 
+
+span.ticker {
+  cursor: pointer;
+}
+
+.tickerCurrentPrice {
+  margin-left: 5px !important;
+  font-weight: 700 !important;
+  color: #000000;
+}
+
 @media (min-width: 760px){
 .css-mub7 {
     height: 52px;
@@ -280,12 +313,12 @@
     margin-bottom: 5px;
 }
 @media (min-width: 760px){
-.css-x8v0h7 {
+.ticker-box {
     padding: 10px 16px;
 }
 }
 
-.css-x8v0h7 {
+.ticker-box {
     -webkit-align-items: center;
     -webkit-box-align: center;
     -ms-flex-align: center;

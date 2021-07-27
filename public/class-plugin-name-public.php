@@ -104,7 +104,10 @@ class Public_Portfolio_Public
 		
 		wp_enqueue_script('popper', plugin_dir_url(__FILE__) . 'js/popper.min.js', array('jquery'), $this->version, false);
 		wp_enqueue_script('tippy', plugin_dir_url(__FILE__) . 'js/tippy.min.js', array('popper'), $this->version, false);
+		wp_enqueue_script('chartist', 'https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.4/chartist.min.js');
+		wp_enqueue_style( 'chartistCSS', 'https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.4/chartist.min.css' );
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/public.js', array('jquery', 'popper'), $this->version, false);
+		wp_enqueue_script('apex', plugin_dir_url(__FILE__) . 'js/apexcharts.min.js', array('jquery'), $this->version, false);
 		wp_add_inline_script($this->plugin_name, 'const auth = "'.Public_Portfolio_Admin::JWT_Credentials().'";');
 	}
 
@@ -131,13 +134,9 @@ class Public_Portfolio_Public
 				}
 			}
 
-			
-
-			
-
 			$percentage = number_format((float)$ticker->gainPercentage, 2, '.', '');
 			$color = ($percentage < 0) ? $color = 'red' : $color = 'green';
-			echo '<div role="listitem" tabindex="0" class="css-mub7"><div><article class="css-x8v0h7"><a aria-label="$' . $ticker->symbol . '"><div data-logo="true" class="css-o6on0v"><img alt="' . $ticker->symbol . ' logo" loading="lazy" src="https://universal.hellopublic.com/companyLogos/' . $ticker->symbol . '@2x.png?v=fa60680a-a44c-4a20-9f07-1aa83dc487d6" class="css-3j1uxc"></div></a><div class="css-jifwjk"><a href="/stocks/' . $ticker->symbol . '"><span class="css-uahqw4"> $' . $ticker->symbol . '</span></a></div><button class="css-gpmf5p" style="color: var(--color-' . $color . '); background-color: var(--color-light-' . $color . ');"><span>' . $percentage . '%</span></button></article></div></div>';
+			echo '<div role="listitem" tabindex="0" class="css-mub7"><div><article class="ticker-box"><a aria-label="$' . $ticker->symbol . '"><div data-logo="true" class="css-o6on0v"><img alt="' . $ticker->symbol . ' logo" loading="lazy" src="https://universal.hellopublic.com/companyLogos/' . $ticker->symbol . '@2x.png?v=fa60680a-a44c-4a20-9f07-1aa83dc487d6" class="css-3j1uxc"></div></a><div class="css-jifwjk"><a href="/stocks/' . $ticker->symbol . '"><span class="css-uahqw4"> $' . $ticker->symbol . '</span></a></div><button class="css-gpmf5p" style="color: var(--color-' . $color . '); background-color: var(--color-light-' . $color . ');"><span>' . $percentage . '%</span></button></article></div></div>';
 		}
 		echo '</section></div>';
 	}
@@ -164,7 +163,7 @@ class Public_Portfolio_Public
 	{
 		$ticker = $atts['ticker'];
 		if (!$ticker) return;
-		return '<iframe width="100%" height="312" src="https://public.com/stocks/' . $ticker . '/embed" frameborder="0" allow="encrypted-media" allowfullscreen allowtransparency></iframe>';
+		return '<iframe width="100%" height="402px" src="https://public.com/stocks/' . $ticker . '/embed" frameborder="0" allow="encrypted-media" allowfullscreen allowtransparency></iframe>';
 	}
 
 	public function filter_stock_mentions($content)

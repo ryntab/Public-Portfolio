@@ -209,7 +209,8 @@ class Public_Portfolio_Admin
 		update_option('public_user_data', $userData, false);
 	}
 
-	public static function set_Individual_Stock($symbol, $exists){
+	public static function set_Individual_Stock($symbol, $exists)
+	{
 		global $wpdb;
 
 		$interval = 'DAY';
@@ -222,17 +223,17 @@ class Public_Portfolio_Admin
 
 		$new = array(
 			'ticker_symbol' => $symbol,
-			'ticker_data' => json_encode($response), 
+			'ticker_data' => json_encode($response),
 			'updated_at' => date('Y-m-d H:i:s')
 		);
 
-		if ($exists){
-			$wpdb->replace( 'public_stored_tickers', $new);
+		if ($exists) {
+			$wpdb->replace('public_stored_tickers', $new);
 		} else if (!$exists) {
-			$wpdb->insert( 'public_stored_tickers', $new);
+			$wpdb->insert('public_stored_tickers', $new);
 		}
 
-		$data = $wpdb->get_results( "SELECT * FROM $table WHERE $column = '$symbol'");
+		$data = $wpdb->get_results("SELECT * FROM $table WHERE $column = '$symbol'");
 
 		return $data;
 	}
@@ -246,22 +247,25 @@ class Public_Portfolio_Admin
 		$table = 'public_stored_tickers';
 		$column = 'ticker_symbol';
 
-		$readTicker = $wpdb->get_results( "SELECT * FROM $table WHERE $column = '$symbol'");
+		$readTicker = $wpdb->get_results("SELECT * FROM $table WHERE $column = '$symbol'");
 
 		//If record does not exist, lets create it!
-		if (empty($readTicker)){
-			$response = Public_Portfolio_Admin::set_Individual_Stock($data['symbol'], $exists = false);
+		if (empty($readTicker)) {
+			$individualStock = Public_Portfolio_Admin::set_Individual_Stock($data['symbol'], $exists = false);
 		};
 
 		//If record is stale, lets update it! Or if its not lets just fetch from the database.
-		if (!empty($readTicker)){
-			if (strtotime(date('Y-m-d H:i:s')) - strtotime($readTicker[0]->updated_at) > 60){ 
-				$response = Public_Portfolio_Admin::set_Individual_Stock($data['symbol'], $exists = true);
+		if (!empty($readTicker)) {
+			if (strtotime(date('Y-m-d H:i:s')) - strtotime($readTicker[0]->updated_at) > 60) {
+				$individualStock = Public_Portfolio_Admin::set_Individual_Stock($data['symbol'], $exists = true);
 			} else {
-				$response = $readTicker;
+				$individualStock = $readTicker;
 			}
 		}
-	
+
+		$response['last_Updated'] = $individualStock[0]->updated_at;
+		$response['ticker_symbol'] = $individualStock[0]->ticker_symbol;
+		$response['ticker_data'] = json_decode($individualStock[0]->ticker_data, true);
 		wp_send_json($response);
 	}
 
