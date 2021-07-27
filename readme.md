@@ -49,6 +49,8 @@ Display the basic information from your Public.com portfolio.
 ## Automatic stock referencing
 
 Embed stock references with super simple notation and automatically display self fetching stock tool tips with time chart graphs and other display options. In order to reference a stock in a post or page, just add a '$' before the stock symbol. The stock will be detected automatically.
+
+All referenced stocks will have their data stored automatically in a database table ```PUBLIC_STORED_TICKERS```. You can set the interval in which stock data should be considered stale and a fetch will be made to the Public.com graph API. By default the interval is set at 60 seconds. 
 ```
 The bull case is pretty clear for why $AMD will reach $100.
 ```
