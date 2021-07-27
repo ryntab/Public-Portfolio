@@ -56,6 +56,12 @@ The bull case is pretty clear for why $AMD will reach $100.
 ```
 <img src="https://github.com/ryntab/Public-Portfolio/blob/main/Tooltip.jpg">
 
+## Single Stock Iframes
+
+Embed a single stock chart directly from the Public.com website using a simple shortcode. It's not recomended that this shortcode is used, it seems Public.com has some formatting issues in their embedded iframes. You can alternativley use our custom single stock displays.
+```
+[public_stock_embed ticker="AMD"]
+```
 <p align="center">
     <br/><br/>
     Made with ❤ by <a href="ryntab.com">Ryan Taber</a>.<br/>
