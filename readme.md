@@ -7,6 +7,8 @@
 - Easily embed and automatically reference stocks using simple notation. 
 - Supports Acato's WP REST Caching.
 
+<br>
+
 ## - User Portfolio Watchlist
 
 Every 60 seconds, this plugin curls the Public.com API and saves your watchlist data to your sites WP options table. The fetch interval can be changed, but 60 seconds is the advised period of time to prevent abuse.
