@@ -238,7 +238,7 @@ class Public_Portfolio_Admin
 		return $data;
 	}
 
-	public function get_Individual_Stock($data)
+	public static function get_Individual_Stock($data)
 	{
 		global $wpdb;
 
@@ -274,7 +274,7 @@ class Public_Portfolio_Admin
 	{
 		register_rest_route('public', '/stock/(?P<symbol>[a-zA-Z0-9-]+)/(?P<interval>[a-zA-Z0-9-]+)', array(
 			'methods' => 'GET',
-			'callback' => [$this, 'get_Individual_Stock'],
+			'callback' => ["Public_Portfolio_Admin" , 'get_Individual_Stock'],
 		));
 	}
 }
